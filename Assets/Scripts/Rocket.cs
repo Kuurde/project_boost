@@ -72,12 +72,27 @@ public class Rocket : MonoBehaviour
         audioSource.Stop();
         audioSource.PlayOneShot(deathSound);
         deathParticles.Play();
-        Invoke("LoadFirstLevel", levelLoadDelay);
+        // Invoke("LoadFirstLevel", levelLoadDelay);
+        Invoke("ReloadCurrentLevel", levelLoadDelay);
     }
 
     private void LoadNextLevel()
     {
-        SceneManager.LoadScene(1);
+        int nextScene = SceneManager.GetActiveScene().buildIndex + 1;
+
+        if (nextScene < SceneManager.sceneCountInBuildSettings)
+        {
+            SceneManager.LoadScene(nextScene);
+        }
+        else
+        {
+            ReloadCurrentLevel();
+        }
+    }
+
+    private void ReloadCurrentLevel()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     private void LoadFirstLevel()
